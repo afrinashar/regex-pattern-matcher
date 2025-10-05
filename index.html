@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regex Pattern Tester - Master Regular Expressions</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-code"></i> Regex Pattern Tester</h1>
+                <p>Master Regular Expressions with Interactive Examples</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Pattern Selection -->
+            <section class="pattern-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-list"></i> Select a Pattern</h2>
+                </div>
+                <div class="pattern-selector">
+                    <select id="patternDropdown" class="pattern-dropdown">
+                        <option value="">Choose a regex pattern...</option>
+                    </select>
+                    <button id="customPatternBtn" class="custom-btn">
+                        <i class="fas fa-edit"></i> Custom Pattern
+                    </button>
+                </div>
+            </section>
+
+            <!-- Pattern Details -->
+            <section class="details-section" id="detailsSection" style="display: none;">
+                <div class="pattern-info">
+                    <div class="pattern-header">
+                        <h3 id="patternTitle">Pattern Title</h3>
+                        <div class="pattern-badges">
+                            <span id="patternCategory" class="category-badge">Category</span>
+                            <span id="patternDifficulty" class="difficulty-badge">Difficulty</span>
+                        </div>
+                    </div>
+                    <div class="pattern-content">
+                        <div class="pattern-regex">
+                            <label>Regular Expression:</label>
+                            <code id="patternCode" class="regex-code">/pattern/flags</code>
+                            <button id="copyRegexBtn" class="copy-btn" title="Copy regex">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                        <div class="pattern-description">
+                            <label>Description:</label>
+                            <p id="patternDescription">Pattern description will appear here.</p>
+                        </div>
+                        <div class="pattern-examples">
+                            <label>Examples:</label>
+                            <div id="patternExamples" class="examples-container">
+                                <!-- Examples will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Interactive Tester -->
+            <section class="tester-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-flask"></i> Test Your Pattern</h2>
+                </div>
+                <div class="tester-container">
+                    <!-- Regex Input -->
+                    <div class="input-group">
+                        <label for="regexInput">Regular Expression:</label>
+                        <div class="regex-input-container">
+                            <input type="text" id="regexInput" class="regex-input" placeholder="Enter your regex pattern (without delimiters)" />
+                            <div class="regex-validation" id="regexValidation" style="display: none;">
+                                <span class="validation-message"></span>
+                            </div>
+                            <div class="flags-container">
+                                <label class="flag-label">
+                                    <input type="checkbox" id="flagG" class="flag-checkbox" />
+                                    <span class="flag-text">g</span>
+                                    <span class="flag-tooltip">Global</span>
+                                </label>
+                                <label class="flag-label">
+                                    <input type="checkbox" id="flagI" class="flag-checkbox" />
+                                    <span class="flag-text">i</span>
+                                    <span class="flag-tooltip">Ignore Case</span>
+                                </label>
+                                <label class="flag-label">
+                                    <input type="checkbox" id="flagM" class="flag-checkbox" />
+                                    <span class="flag-text">m</span>
+                                    <span class="flag-tooltip">Multiline</span>
+                                </label>
+                                <label class="flag-label">
+                                    <input type="checkbox" id="flagS" class="flag-checkbox" />
+                                    <span class="flag-text">s</span>
+                                    <span class="flag-tooltip">Dotall</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Test String Input -->
+                    <div class="input-group">
+                        <label for="testString">Test String:</label>
+                        <textarea id="testString" class="test-input" placeholder="Enter text to test against your regex pattern" rows="4"></textarea>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="action-buttons">
+                        <button id="testBtn" class="action-btn test-btn">
+                            <i class="fas fa-play"></i> Test Pattern
+                        </button>
+                        <button id="clearBtn" class="action-btn clear-btn">
+                            <i class="fas fa-trash"></i> Clear All
+                        </button>
+                        <button id="exampleBtn" class="action-btn example-btn">
+                            <i class="fas fa-lightbulb"></i> Load Example
+                        </button>
+                    </div>
+
+                    <!-- Results -->
+                    <div class="results-section" id="resultsSection">
+                        <h3><i class="fas fa-chart-line"></i> Results</h3>
+                        <div class="results-content">
+                            <div class="result-item">
+                                <label>Match Status:</label>
+                                <span id="matchStatus" class="status-indicator">No test performed</span>
+                            </div>
+                            <div class="result-item">
+                                <label>Total Matches:</label>
+                                <span id="matchCount" class="match-count">0</span>
+                            </div>
+                            <div class="result-item full-width">
+                                <label>Matches Found:</label>
+                                <div id="matchResults" class="match-results">
+                                    No matches to display
+                                </div>
+                            </div>
+                            <div class="result-item full-width">
+                                <label>Highlighted Text:</label>
+                                <div id="highlightedText" class="highlighted-text">
+                                    No text to highlight
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Method Examples -->
+            <section class="methods-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-tools"></i> JavaScript Methods</h2>
+                </div>
+                <div class="methods-container">
+                    <div class="method-buttons">
+                        <button class="method-btn" data-method="test">test()</button>
+                        <button class="method-btn" data-method="match">match()</button>
+                        <button class="method-btn" data-method="search">search()</button>
+                        <button class="method-btn" data-method="replace">replace()</button>
+                        <button class="method-btn" data-method="split">split()</button>
+                        <button class="method-btn" data-method="matchAll">matchAll()</button>
+                    </div>
+                    <div class="method-output">
+                        <pre id="methodOutput">Select a method to see how it works with your regex</pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Regex Tools -->
+            <section class="tools-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-wrench"></i> Regex Tools</h2>
+                </div>
+                <div class="tools-container">
+                    <div class="tool-buttons">
+                        <button id="regexBuilderBtn" class="tool-btn">
+                            <i class="fas fa-hammer"></i> Pattern Builder
+                        </button>
+                        <button id="cheatSheetBtn" class="tool-btn">
+                            <i class="fas fa-book"></i> Cheat Sheet
+                        </button>
+                        <button id="benchmarkBtn" class="tool-btn">
+                            <i class="fas fa-stopwatch"></i> Performance Test
+                        </button>
+                        <button id="exportBtn" class="tool-btn">
+                            <i class="fas fa-download"></i> Export Patterns
+                        </button>
+                    </div>
+                    <div class="tools-output" id="toolsOutput">
+                        <p>Select a tool to get started with advanced regex features.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Cheat Sheet -->
+            <section class="cheatsheet-section" id="cheatsheetSection" style="display: none;">
+                <div class="section-header">
+                    <h2><i class="fas fa-book"></i> Complete Regex Cheat Sheet 📋</h2>
+                </div>
+                <div class="cheatsheet-container">
+                    <!-- Navigation Tabs -->
+                    <div class="cheat-nav">
+                        <button class="cheat-tab active" onclick="showCheatTab('basics')">Basics</button>
+                        <button class="cheat-tab" onclick="showCheatTab('advanced')">Advanced</button>
+                        <button class="cheat-tab" onclick="showCheatTab('patterns')">Common Patterns</button>
+                        <button class="cheat-tab" onclick="showCheatTab('methods')">JS Methods</button>
+                        <button class="cheat-tab" onclick="showCheatTab('examples')">Examples</button>
+                    </div>
+
+                    <!-- Basics Tab -->
+                    <div id="cheat-basics" class="cheat-tab-content active">
+                        <div class="cheatsheet-grid">
+                            <div class="cheat-category">
+                                <h3>🚩 Flags (Modifiers)</h3>
+                                <div class="cheat-items">
+                                    <div class="cheat-item" onclick="toggleFlag('g')">
+                                        <code>g</code>
+                                        <span>Global - Find all matches (not just first)</span>
+                                    </div>
+                                    <div class="cheat-item" onclick="toggleFlag('i')">
+                                        <code>i</code>
+                                        <span>Case Insensitive - Ignore case differences</span>
+                                    </div>
+                                    <div class="cheat-item" onclick="toggleFlag('m')">
+                                        <code>m</code>
+                                        <span>Multiline - ^ and $ match line starts/ends</span>
+                                    </div>
+                                    <div class="cheat-item" onclick="toggleFlag('s')">
+                                        <code>s</code>
+                                        <span>Dotall - . matches newline characters</span>
+                                    </div>
+                                    <div class="cheat-item">
+                                        <code>u</code>
+                                        <span>Unicode - Full Unicode support for emojis</span>
+                                    </div>
+                                    <div class="cheat-item">
+                                        <code>y</code>
+                                        <span>Sticky - Match from lastIndex position</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="cheat-category">
+                                <h3>🔤 Character Classes</h3>
+                                <div class="cheat-items">
+                                    <div class="cheat-item" onclick="insertCheatPattern('\\d')">
+                                        <code>\d</code>
+                                        <span>Digit (0-9)</span>
+                                    </div>
+                                    <div class="cheat-item" onclick="insertCheatPattern('\\D')">
+                                        <code>\D</code>
+                                        <span>Non-digit (anything except 0-9)</span>
+                                    </div>
+                                    <div class="cheat-item" onclick="insertCheatPattern('\\w')">
+                                        <code>\w</code>
+                                        <span>Word character (a-z, A-Z, 0-9, _)</span>
+                                    </div>
+                                    <div class="cheat-item" onclick="insertCheatPattern('\\W')">
+                                        <code>\W</code>
+                                        <span>Non-word character</span>
+                                    </div>
+                                    <div class="cheat-item" onclick="insertCheatPattern('\\s')">
+                                        <code>\s</code>
+                                        <span>Whitespace (space, tab, newline)</span>
+                                    </div>
+                                    <div class="cheat-item" onclick="insertCheatPattern('\\S')">
+                                        <code>\S</code>
+                                        <span>Non-whitespace</span>
+                                    </div>
+                                    <div class="cheat-item" onclick="insertCheatPattern('.')">
+                                        <code>.</code>
+                                        <span>Any character except newline</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="cheat-category">
+                                <h3>🔢 Quantifiers</h3>
+                                <div class="cheat-items">
+                                    <div class="cheat-item" onclick="insertCheatPattern('*')">
+                                        <code>*</code>
+                                        <span>Zero or more (0+ occurrences)</span>
+                                    </div>
+                                    <div class="cheat-item" onclick="insertCheatPattern('+')">
+                                        <code>+</code>
+                                        <span>One or more (1+ occurrences)</span>
+                                    </div>
+                                    <div class="cheat-item" onclick="insertCheatPattern('?')">
+                                        <code>?</code>
+                                        <span>Zero or one (optional)</span>
+                                    </div>
+                                    <div class="cheat-item" onclick="insertCheatPattern('{3}')">
+                                        <code>{n}</code>
+                                        <span>Exactly n times</span>
+                                    </div>
+                                    <div class="cheat-item" onclick="insertCheatPattern('{3,}')">
+                                        <code>{n,}</code>
+                                        <span>n or more times</span>
+                                    </div>
+                                    <div class="cheat-item" onclick="insertCheatPattern('{2,4}')">
+                                        <code>{n,m}</code>
+                                        <span>Between n and m times</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="cheat-category">
+                                <h3>📍 Anchors & Boundaries</h3>
+                                <div class="cheat-items">
+                                    <div class="cheat-item" onclick="insertCheatPattern('^')">
+                                        <code>^</code>
+                                        <span>Start of string/line</span>
+                                    </div>
+                                    <div class="cheat-item" onclick="insertCheatPattern('$')">
+                                        <code>$</code>
+                                        <span>End of string/line</span>
+                                    </div>
+                                    <div class="cheat-item" onclick="insertCheatPattern('\\b')">
+                                        <code>\b</code>
+                                        <span>Word boundary</span>
+                                    </div>
+                                    <div class="cheat-item" onclick="insertCheatPattern('\\B')">
+                                        <code>\B</code>
+                                        <span>Non-word boundary</span>
+                                    </div>
+                                    <div class="cheat-item" onclick="insertCheatPattern('\\A')">
+                                        <code>\A</code>
+                                        <span>Start of string (absolute)</span>
+                                    </div>
+                                    <div class="cheat-item" onclick="insertCheatPattern('\\Z')">
+                                        <code>\Z</code>
+                                        <span>End of string (absolute)</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="cheat-category">
+                                <h3>🎯 Custom Character Classes</h3>
+                                <div class="cheat-items">
+                                    <div class="cheat-item" onclick="insertCheatPattern('[abc]')">
+                                        <code>[abc]</code>
+                                        <span>Any of a, b, or c</span>
+                                    </div>
+                                    <div class="cheat-item" onclick="insertCheatPattern('[a-z]')">
+                                        <code>[a-z]</code>
+                                        <span>Range from a to z</span>
+                                    </div>
+                                    <div class="cheat-item" onclick="insertCheatPattern('[^abc]')">
+                                        <code>[^abc]</code>
+                                        <span>NOT a, b, or c</span>
+                                    </div>
+                                    <div class="cheat-item" onclick="insertCheatPattern('[a-zA-Z]')">
+                                        <code>[a-zA-Z]</code>
+                                        <span>Multiple ranges</span>
+                                    </div>
+                                    <div class="cheat-item" onclick="insertCheatPattern('[a-z0-9]')">
+                                        <code>[a-z0-9]</code>
+                                        <span>Combined ranges</span>
+                                    </div>
+                                    <div class="cheat-item" onclick="insertCheatPattern('[aeiou]')">
+                                        <code>[aeiou]</code>
+                                        <span>Vowels example</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Advanced Tab -->
+                    <div id="cheat-advanced" class="cheat-tab-content">
+                        <div class="cheatsheet-grid">
+                            <div class="cheat-category">
+                                <h3>👥 Groups & Capturing</h3>
+                                <div class="cheat-items">
+                                    <div class="cheat-item" onclick="insertCheatPattern('()')">
+                                        <code>()</code>
+                                        <span>Capturing group - captures matched text</span>
+                                    </div>
+                                    <div class="cheat-item" onclick="insertCheatPattern('(?:)')">
+                                        <code>(?:)</code>
+                                        <span>Non-capturing group - groups without capturing</span>
+                                    </div>
+                                    <div class="cheat-item" onclick="insertCheatPattern('(?<name>)')">
+                                        <code>(?&lt;name&gt;)</code>
+                                        <span>Named group - named capture</span>
+                                    </div>
+                                    <div class="cheat-item" onclick="insertCheatPattern('\\1')">
+                                        <code>\1</code>
+                                        <span>Backreference - reference to group 1</span>
+                                    </div>
+                                    <div class="cheat-item" onclick="insertCheatPattern('\\k<name>')">
+                                        <code>\k&lt;name&gt;</code>
+                                        <span>Named backreference</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="cheat-category">
+                                <h3>👀 Lookahead & Lookbehind</h3>
+                                <div class="cheat-items">
+                                    <div class="cheat-item" onclick="insertCheatPattern('(?=)')">
+                                        <code>(?=)</code>
+                                        <span>Positive lookahead - followed by pattern</span>
+                                    </div>
+                                    <div class="cheat-item" onclick="insertCheatPattern('(?!)')">
+                                        <code>(?!)</code>
+                                        <span>Negative lookahead - NOT followed by pattern</span>
+                                    </div>
+                                    <div class="cheat-item" onclick="insertCheatPattern('(?<=)')">
+                                        <code>(?&lt;=)</code>
+                                        <span>Positive lookbehind - preceded by pattern</span>
+                                    </div>
+                                    <div class="cheat-item" onclick="insertCheatPattern('(?<!)')">
+                                        <code>(?&lt;!)</code>
+                                        <span>Negative lookbehind - NOT preceded by pattern</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="cheat-category">
+                                <h3>🔧 Special Characters (Need Escaping)</h3>
+                                <div class="cheat-items">
+                                    <div class="cheat-item" onclick="insertCheatPattern('\\.')">
+                                        <code>\.</code>
+                                        <span>Literal dot</span>
+                                    </div>
+                                    <div class="cheat-item" onclick="insertCheatPattern('\\*')">
+                                        <code>\*</code>
+                                        <span>Literal asterisk</span>
+                                    </div>
+                                    <div class="cheat-item" onclick="insertCheatPattern('\\+')">
+                                        <code>\+</code>
+                                        <span>Literal plus</span>
+                                    </div>
+                                    <div class="cheat-item" onclick="insertCheatPattern('\\?')">
+                                        <code>\?</code>
+                                        <span>Literal question mark</span>
+                                    </div>
+                                    <div class="cheat-item" onclick="insertCheatPattern('\\\\')">
+                                        <code>\\</code>
+                                        <span>Literal backslash</span>
+                                    </div>
+                                    <div class="cheat-item" onclick="insertCheatPattern('\\(')">
+                                        <code>\(</code>
+                                        <span>Literal parenthesis</span>
+                                    </div>
+                                    <div class="cheat-item" onclick="insertCheatPattern('\\[')">
+                                        <code>\[</code>
+                                        <span>Literal bracket</span>
+                                    </div>
+                                    <div class="cheat-item" onclick="insertCheatPattern('\\{')">
+                                        <code>\{</code>
+                                        <span>Literal brace</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Common Patterns Tab -->
+                    <div id="cheat-patterns" class="cheat-tab-content">
+                        <div class="pattern-examples">
+                            <div class="pattern-example">
+                                <h4>📧 Email Validation</h4>
+                                <code onclick="loadCheatPattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')">/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/</code>
+                                <p>Matches most common email formats</p>
+                            </div>
+
+                            <div class="pattern-example">
+                                <h4>📞 Phone Numbers (US Format)</h4>
+                                <code onclick="loadCheatPattern('^\\(?([0-9]{3})\\)?[-.\s]?([0-9]{3})[-.\s]?([0-9]{4})$')">/^\(?(\d{3})\)?[-.\s]?(\d{3})[-.\s]?(\d{4})$/</code>
+                                <p>Matches US phone numbers in various formats</p>
+                            </div>
+
+                            <div class="pattern-example">
+                                <h4>🌐 URLs</h4>
+                                <code onclick="loadCheatPattern('https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)')">/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/</code>
+                                <p>Matches HTTP and HTTPS URLs</p>
+                            </div>
+
+                            <div class="pattern-example">
+                                <h4>🌍 IP Address</h4>
+                                <code onclick="loadCheatPattern('^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$')">/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/</code>
+                                <p>Validates IPv4 addresses</p>
+                            </div>
+
+                            <div class="pattern-example">
+                                <h4>💳 Credit Card Numbers</h4>
+                                <code onclick="loadCheatPattern('^\\d{4}[\\s-]?\\d{4}[\\s-]?\\d{4}[\\s-]?\\d{4}$')">/^\d{4}[\s-]?\d{4}[\s-]?\d{4}[\s-]?\d{4}$/</code>
+                                <p>Matches credit card number format</p>
+                            </div>
+
+                            <div class="pattern-example">
+                                <h4>📅 Date (YYYY-MM-DD)</h4>
+                                <code onclick="loadCheatPattern('^\\d{4}-\\d{2}-\\d{2}$')">/^\d{4}-\d{2}-\d{2}$/</code>
+                                <p>ISO date format validation</p>
+                            </div>
+
+                            <div class="pattern-example">
+                                <h4>⏰ Time (HH:MM)</h4>
+                                <code onclick="loadCheatPattern('^([01]?[0-9]|2[0-3]):[0-5][0-9]$')">/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/</code>
+                                <p>24-hour time format</p>
+                            </div>
+
+                            <div class="pattern-example">
+                                <h4>🎨 Hexadecimal Color</h4>
+                                <code onclick="loadCheatPattern('^#?([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$')">/^#?([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/</code>
+                                <p>Hex color codes with optional #</p>
+                            </div>
+
+                            <div class="pattern-example">
+                                <h4>🔒 Password Strength</h4>
+                                <code onclick="loadCheatPattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$')">/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/</code>
+                                <p>Strong password requirements</p>
+                            </div>
+
+                            <div class="pattern-example">
+                                <h4>📝 HTML Tags</h4>
+                                <code onclick="loadCheatPattern('<\\/?[\\w\\s]*>|<.+[\\W]>')">/&lt;\/?[\w\s]*&gt;|&lt;.+[\W]&gt;/</code>
+                                <p>Matches HTML opening and closing tags</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- JS Methods Tab -->
+                    <div id="cheat-methods" class="cheat-tab-content">
+                        <div class="method-reference">
+                            <div class="method-card">
+                                <h4>test()</h4>
+                                <p><strong>Purpose:</strong> Check if pattern exists</p>
+                                <p><strong>Returns:</strong> boolean</p>
+                                <code>regex.test(string)</code>
+                                <div class="method-example">
+                                    <pre>/\d/.test("hello123") // true</pre>
+                                </div>
+                            </div>
+
+                            <div class="method-card">
+                                <h4>match()</h4>
+                                <p><strong>Purpose:</strong> Find matches</p>
+                                <p><strong>Returns:</strong> Array or null</p>
+                                <code>string.match(regex)</code>
+                                <div class="method-example">
+                                    <pre>"hello123".match(/\d+/) // ["123"]</pre>
+                                </div>
+                            </div>
+
+                            <div class="method-card">
+                                <h4>matchAll()</h4>
+                                <p><strong>Purpose:</strong> Find all matches with details</p>
+                                <p><strong>Returns:</strong> Iterator</p>
+                                <code>string.matchAll(regex)</code>
+                                <div class="method-example">
+                                    <pre>Array.from("a1b2".matchAll(/\d/g)) // [["1"], ["2"]]</pre>
+                                </div>
+                            </div>
+
+                            <div class="method-card">
+                                <h4>search()</h4>
+                                <p><strong>Purpose:</strong> Find position of first match</p>
+                                <p><strong>Returns:</strong> Index or -1</p>
+                                <code>string.search(regex)</code>
+                                <div class="method-example">
+                                    <pre>"hello123".search(/\d/) // 5</pre>
+                                </div>
+                            </div>
+
+                            <div class="method-card">
+                                <h4>replace()</h4>
+                                <p><strong>Purpose:</strong> Replace matches</p>
+                                <p><strong>Returns:</strong> New string</p>
+                                <code>string.replace(regex, replacement)</code>
+                                <div class="method-example">
+                                    <pre>"hello123".replace(/\d+/, "XXX") // "helloXXX"</pre>
+                                </div>
+                            </div>
+
+                            <div class="method-card">
+                                <h4>split()</h4>
+                                <p><strong>Purpose:</strong> Split string by pattern</p>
+                                <p><strong>Returns:</strong> Array</p>
+                                <code>string.split(regex)</code>
+                                <div class="method-example">
+                                    <pre>"a,b;c".split(/[,;]/) // ["a", "b", "c"]</pre>
+                                </div>
+                            </div>
+
+                            <div class="method-card">
+                                <h4>exec()</h4>
+                                <p><strong>Purpose:</strong> Execute regex on string</p>
+                                <p><strong>Returns:</strong> Array or null</p>
+                                <code>regex.exec(string)</code>
+                                <div class="method-example">
+                                    <pre>/(\d+)/.exec("hello123") // ["123", "123"]</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Examples Tab -->
+                    <div id="cheat-examples" class="cheat-tab-content">
+                        <div class="example-sections">
+                            <div class="example-section">
+                                <h4>🔍 Extract Data</h4>
+                                <div class="code-example">
+                                    <pre>// Extract all numbers
+const numbers = text.match(/\d+/g);
+
+// Extract words starting with capital
+const capitalized = text.match(/\b[A-Z]\w*/g);
+
+// Extract email addresses
+const emails = text.match(/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g);</pre>
+                                </div>
+                            </div>
+
+                            <div class="example-section">
+                                <h4>✅ Validation</h4>
+                                <div class="code-example">
+                                    <pre>// Check if string is only digits
+const isNumber = /^\d+$/.test(input);
+
+// Check if valid username (alphanumeric + underscore, 3-16 chars)
+const isValidUsername = /^[a-zA-Z0-9_]{3,16}$/.test(username);
+
+// Check if contains only letters and spaces
+const isName = /^[a-zA-Z\s]+$/.test(name);</pre>
+                                </div>
+                            </div>
+
+                            <div class="example-section">
+                                <h4>🧹 Text Cleaning</h4>
+                                <div class="code-example">
+                                    <pre>// Remove extra whitespace
+const cleaned = text.replace(/\s+/g, ' ').trim();
+
+// Remove all non-alphanumeric except spaces
+const alphaOnly = text.replace(/[^a-zA-Z0-9\s]/g, '');
+
+// Replace multiple punctuation with single
+const singlePunct = text.replace(/[.!?]{2,}/g, '.');</pre>
+                                </div>
+                            </div>
+
+                            <div class="example-section">
+                                <h4>🔄 String Manipulation</h4>
+                                <div class="code-example">
+                                    <pre>// Convert camelCase to kebab-case
+const kebabCase = camelCase.replace(/[A-Z]/g, '-$&').toLowerCase();
+
+// Capitalize first letter of each word
+const titleCase = text.replace(/\b\w/g, l => l.toUpperCase());
+
+// Insert spaces before capital letters
+const spaced = text.replace(/([a-z])([A-Z])/g, '$1 $2');</pre>
+                                </div>
+                            </div>
+
+                            <div class="example-section">
+                                <h4>⚡ Performance Tips</h4>
+                                <ul class="tips-list">
+                                    <li>Compile regex once, reuse many times</li>
+                                    <li>Use non-capturing groups <code>(?:)</code> when you don't need the capture</li>
+                                    <li>Be specific rather than greedy (<code>.*?</code> instead of <code>.*</code>)</li>
+                                    <li>Use character classes instead of alternation when possible</li>
+                                    <li>Anchor patterns to reduce backtracking</li>
+                                </ul>
+                            </div>
+
+                            <div class="example-section">
+                                <h4>🛠️ Debugging Tools</h4>
+                                <ul class="tips-list">
+                                    <li><a href="https://regex101.com" target="_blank">regex101.com</a> - Test and debug patterns</li>
+                                    <li><a href="https://regexr.com" target="_blank">regexr.com</a> - Visual regex builder</li>
+                                    <li><a href="https://regexpal.com" target="_blank">regexpal.com</a> - Simple regex tester</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2025 Regex Pattern Tester. Built for learning and mastering regular expressions.</p>
+        </footer>
+    </div>
+
+    <!-- Custom Pattern Modal -->
+    <div id="customModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create Custom Pattern</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <label>Pattern Name:</label>
+                    <input type="text" id="customName" placeholder="Enter pattern name">
+                </div>
+                <div class="input-group">
+                    <label>Regular Expression:</label>
+                    <input type="text" id="customRegex" placeholder="Enter regex pattern">
+                </div>
+                <div class="input-group">
+                    <label>Description:</label>
+                    <textarea id="customDescription" placeholder="Describe what this pattern does" rows="3"></textarea>
+                </div>
+                <div class="input-group">
+                    <label>Test Examples (one per line):</label>
+                    <textarea id="customExamples" placeholder="Example 1&#10;Example 2&#10;Example 3" rows="4"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="saveCustomBtn" class="action-btn">Save Pattern</button>
+                <button id="cancelCustomBtn" class="action-btn clear-btn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
